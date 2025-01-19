@@ -344,7 +344,7 @@ const Dashboard = () => {
           p: 3, 
           mb: 4, 
           borderRadius: 2,
-          background: 'linear-gradient(to right, #f3f4f6, #ffffff)'
+          background: 'linear-gradient(to right, #f8f9fa, #ffffff)'
         }}
       >
         <Box display="flex" alignItems="center" gap={2}>
@@ -352,14 +352,14 @@ const Dashboard = () => {
             sx={{ 
               width: 56, 
               height: 56, 
-              bgcolor: 'primary.main',
+              bgcolor: '#2c3e50',
               boxShadow: 2
             }}
           >
             {user?.name ? user.name[0].toUpperCase() : <PersonIcon />}
           </Avatar>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <Typography variant="h6" fontWeight="bold" color="primary.main">
+            <Typography variant="h6" fontWeight="bold" color="black">
               Welcome, {user?.name || 'User'}
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -380,13 +380,22 @@ const Dashboard = () => {
         }}
       >
         <Box display="flex" alignItems="center" gap={2}>
-          <Typography variant="h4" component="h1" fontWeight="bold" color="primary">
+          <Typography variant="h4" component="h1" fontWeight="bold" color="black">
             Food Waste Dashboard
           </Typography>
           <Tooltip title="Refresh all data">
             <IconButton 
               onClick={refreshAllData} 
-              color="primary"
+              color="black"
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                  color: 'black',
+                  '& .MuiSvgIcon-root': {  
+                    color: 'black'
+                  }
+                }
+              }}
               disabled={loading}
             >
               {loading ? (
@@ -404,17 +413,14 @@ const Dashboard = () => {
               variant="contained"
               startIcon={<AddIcon />}
               onClick={() => navigate("/add-data")}
-            sx={{ 
-              borderRadius: 2,
-              '&:hover': {
-                backgroundColor: 'primary.light',
-                color: 'black',
-                '& .MuiSvgIcon-root': {  
-                  color: 'black'
+              sx={{ 
+                borderRadius: 2,
+                backgroundColor: "#2c3e50",
+                '&:hover': {
+                  backgroundColor: "primary.main",
                 }
-              }
-            }}
-          >
+              }}
+            >
               Add New Entry
             </Button>
           </Tooltip>
@@ -445,7 +451,7 @@ const Dashboard = () => {
       
 
       <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
-        <Typography variant="h6" gutterBottom color="primary">
+        <Typography variant="h6" gutterBottom color="black">
           Predict Food Preparation
         </Typography>
         
@@ -515,11 +521,20 @@ const Dashboard = () => {
         )}
       </Paper>
 
-      <Paper elevation={3} sx={{ borderRadius: 2, overflow: "hidden" }}>
+      <Paper 
+        elevation={2} 
+        sx={{ 
+          p: 3, 
+          mb: 4, 
+          borderRadius: 2,
+          backgroundColor: "#ffffff",
+          border: "1px solid #e2e8f0"
+        }}
+      >
         <TableContainer>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
-              <TableRow sx={{ backgroundColor: "primary.main" }}>
+              <TableRow sx={{ backgroundColor: "#2c3e50" }}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Food Item</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Quantity Prepared</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Quantity Wasted</TableCell>
@@ -542,8 +557,9 @@ const Dashboard = () => {
                   <TableRow
                     key={item._id}
                     sx={{ 
-                      "&:nth-of-type(odd)": { backgroundColor: "action.hover" },
-                      "&:hover": { backgroundColor: "action.selected" }
+                      "&:nth-of-type(odd)": { backgroundColor: "#f8f9fa" },
+                      "&:hover": { backgroundColor: "#edf2f7" },
+                      transition: "background-color 0.2s"
                     }}
                   >
                     <TableCell sx={{ fontWeight: "500" }}>{item.notes}</TableCell>
