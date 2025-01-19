@@ -30,6 +30,11 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import StatisticsCards from '../components/StatisticsCards';
+import WasteAnalyticsChart from '../components/WasteAnalyticsChart';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditDataModal from '../components/EditDataModal';
+import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -51,6 +56,10 @@ const Dashboard = () => {
     attendees: ''
   });
   const [isPredicting, setIsPredicting] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const eventTypes = [
     'Wedding',
@@ -244,6 +253,81 @@ const Dashboard = () => {
     return ((wasted / prepared) * 100).toFixed(1);
   };
 
+  const handleEdit = (item) => {
+    setSelectedItem(item);
+    setEditModalOpen(true);
+  };
+
+  const handleDelete = (item) => {
+    setItemToDelete(item);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const response = await axios.delete(
+        `http://localhost:5000/api/data/${itemToDelete._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setData(data.filter(item => item._id !== itemToDelete._id));
+        setSnackbarMessage("Entry deleted successfully!");
+        setSnackbarSeverity("success");
+      } else {
+        throw new Error('Failed to delete');
+      }
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+      setSnackbarMessage(
+        error.response?.data?.message || "Error deleting entry"
+      );
+      setSnackbarSeverity("error");
+    } finally {
+      setOpenSnackbar(true);
+      setDeleteModalOpen(false);
+      setItemToDelete(null);
+    }
+  };
+
+  const handleUpdate = async (id, updatedData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `http://localhost:5000/api/data/${id}`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setData(data.map(item => 
+        item._id === id ? response.data : item
+      ));
+      
+      setSnackbarMessage("Entry updated successfully!");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error("Error updating entry:", error);
+      setSnackbarMessage(error.response?.data?.message || "Error updating entry");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    }
+  };
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
@@ -338,6 +422,7 @@ const Dashboard = () => {
       </Box>
 
       <StatisticsCards data={data} />
+      
 
       <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
         <Typography variant="h6" gutterBottom color="primary">
@@ -420,6 +505,7 @@ const Dashboard = () => {
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Quantity Wasted</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Waste %</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Date</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -457,6 +543,24 @@ const Dashboard = () => {
                         day: "numeric",
                       })}
                     </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <IconButton 
+                          color="primary" 
+                          onClick={() => handleEdit(item)}
+                          size="small"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton 
+                          color="error" 
+                          onClick={() => handleDelete(item)}
+                          size="small"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
                   </TableRow>
                 ))
               )}
@@ -464,6 +568,8 @@ const Dashboard = () => {
           </Table>
         </TableContainer>
       </Paper>
+
+      <WasteAnalyticsChart data={data} />
 
       <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
         <Typography variant="h6" gutterBottom color="primary" sx={{ mb: 3 }}>
@@ -538,6 +644,25 @@ const Dashboard = () => {
           </TableContainer>
         )}
       </Paper>
+
+      <EditDataModal
+        open={editModalOpen}
+        handleClose={() => {
+          setEditModalOpen(false);
+          setSelectedItem(null);
+        }}
+        data={selectedItem}
+        handleUpdate={handleUpdate}
+      />
+
+      <DeleteConfirmationModal
+        open={deleteModalOpen}
+        handleClose={() => {
+          setDeleteModalOpen(false);
+          setItemToDelete(null);
+        }}
+        handleConfirmDelete={handleConfirmDelete}
+      />
 
       <Snackbar
         open={openSnackbar}

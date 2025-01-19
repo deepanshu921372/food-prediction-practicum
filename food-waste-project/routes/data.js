@@ -92,21 +92,21 @@ router.put('/:id', auth, async (req, res) => {
 
 router.delete('/:id', auth, async (req, res) => {
   try {
-    let data = await Data.findById(req.params.id);
+    const data = await Data.findById(req.params.id);
     
     if (!data) {
       return res.status(404).json({ message: 'Data not found' });
     }
 
-    // Check if the data belongs to the user
+    // Check if the data belongs to the logged-in user
     if (data.userId.toString() !== req.user.id) {
-      return res.status(403).json({ message: 'Not authorized' });
+      return res.status(401).json({ message: 'Not authorized' });
     }
 
-    await Data.findByIdAndRemove(req.params.id);
-    res.json({ message: 'Data removed' });
-  } catch (err) {
-    console.error('Error deleting data:', err);
+    await Data.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Data deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting data:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

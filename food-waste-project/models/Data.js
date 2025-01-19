@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 
-const dataSchema = new mongoose.Schema({
+const DataSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true
+  },
+  notes: {
+    type: String,
     required: true
   },
   foodPrepared: {
@@ -14,23 +18,12 @@ const dataSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  eventType: {
-    type: String,
-    required: true
-  },
-  attendees: {
-    type: Number,
-    required: true
-  },
   date: {
     type: Date,
-    default: Date.now
-  },
-  notes: {
-    type: String
+    required: true
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Data', dataSchema);
+module.exports = mongoose.model('Data', DataSchema);

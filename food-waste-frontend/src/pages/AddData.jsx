@@ -55,6 +55,14 @@ const AddData = () => {
     }
     if (!data.date) {
       newErrors.date = "Date is required";
+    } else {
+      const selectedDate = new Date(data.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time part for proper comparison
+      
+      if (selectedDate > today) {
+        newErrors.date = "Date cannot be in the future";
+      }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -250,6 +258,9 @@ const AddData = () => {
                   helperText={errors.date}
                   required
                   InputLabelProps={{ shrink: true }}
+                  inputProps={{
+                    max: new Date().toISOString().split('T')[0] // Restricts future dates in date picker
+                  }}
                 />
               </Grid>
 
