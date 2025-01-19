@@ -29,6 +29,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
+import StatisticsCards from '../components/StatisticsCards';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -335,6 +336,8 @@ const Dashboard = () => {
           </Tooltip>
         </Box>
       </Box>
+
+      <StatisticsCards data={data} />
 
       <Paper elevation={3} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
         <Typography variant="h6" gutterBottom color="primary">
