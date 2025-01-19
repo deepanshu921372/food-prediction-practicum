@@ -399,21 +399,41 @@ const Dashboard = () => {
         </Box>
 
         <Box display="flex" gap={2}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => navigate("/add-data")}
-            sx={{ borderRadius: 2 }}
+          <Tooltip title="Add New Entry">
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => navigate("/add-data")}
+            sx={{ 
+              borderRadius: 2,
+              '&:hover': {
+                backgroundColor: 'primary.light',
+                color: 'black',
+                '& .MuiSvgIcon-root': {  
+                  color: 'black'
+                }
+              }
+            }}
           >
-            Add New Entry
-          </Button>
+              Add New Entry
+            </Button>
+          </Tooltip>
           <Tooltip title="Logout">
             <Button
               variant="outlined"
               color="error"
               startIcon={<LogoutIcon />}
               onClick={handleLogout}
-              sx={{ borderRadius: 2 }}
+              sx={{ 
+                borderRadius: 2,
+                '&:hover': {
+                  backgroundColor: 'error.main',
+                  color: 'white',
+                  '& .MuiSvgIcon-root': {  
+                    color: 'white'
+                  }
+                }
+              }}
             >
               Logout
             </Button>
