@@ -358,7 +358,7 @@ const Dashboard = () => {
           >
             {user?.name ? user.name[0].toUpperCase() : <PersonIcon />}
           </Avatar>
-          <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <Typography variant="h6" fontWeight="bold" color="primary.main">
               Welcome, {user?.name || 'User'}
             </Typography>
