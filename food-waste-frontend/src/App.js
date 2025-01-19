@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import AddData from "./pages/AddData";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRoute from "./components/AuthRoute";
+import SplashScreen from "./components/SplashScreen";
 import "./App.css";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+        <Route path="/" element={<SplashScreen />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
           
           <Route 
