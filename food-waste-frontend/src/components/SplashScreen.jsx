@@ -22,7 +22,7 @@ const SplashScreen = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'primary.main',
+        backgroundColor: '#2c3e50',
       }}
     >
       <Typography
