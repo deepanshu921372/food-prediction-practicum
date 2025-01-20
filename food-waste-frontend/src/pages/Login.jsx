@@ -79,7 +79,7 @@ function Login() {
             borderRadius: 2,
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "#2c3e50" }}>
             <LockOutlinedIcon />
           </Avatar>
           
@@ -124,6 +124,10 @@ function Login() {
                 py: 1.5,
                 fontSize: "1.1rem",
                 textTransform: "none",
+                '&:hover': {
+                  backgroundColor: '#2c3e50',
+                  color: 'white'
+                }
               }}
             >
               Log In
