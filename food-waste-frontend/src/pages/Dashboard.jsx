@@ -19,7 +19,6 @@ import {
   Tooltip,
   Snackbar,
   Avatar,
-  Divider,
   TextField,
   MenuItem,
   Grid,
@@ -43,9 +42,9 @@ const Dashboard = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [predictionDate, setPredictionDate] = useState(new Date().toISOString().split('T')[0]);
-  const [eventType, setEventType] = useState('Small Gathering');
-  const [attendees, setAttendees] = useState(50);
+  // const [predictionDate, setPredictionDate] = useState(new Date().toISOString().split('T')[0]);
+  // const [eventType, setEventType] = useState('Small Gathering');
+  // const [attendees, setAttendees] = useState(50);
   const [prediction, setPrediction] = useState(null);
   const [mlData, setMlData] = useState([]);
   const [isMLDataLoading, setIsMLDataLoading] = useState(true);
@@ -233,9 +232,16 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetchUserDetails();
-    fetchData();
-    fetchMLData();
+    const initializeDashboard = async () => {
+      await Promise.all([
+        fetchUserDetails(),
+        fetchData(),
+        fetchMLData()
+      ]);
+    };
+
+    initializeDashboard();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const handleLogout = () => {
@@ -248,10 +254,10 @@ const Dashboard = () => {
     }, 1000);
   };
 
-  const calculateWastePercentage = (prepared, wasted) => {
-    if (!prepared || !wasted) return "0.0";
-    return ((wasted / prepared) * 100).toFixed(1);
-  };
+  // const calculateWastePercentage = (prepared, wasted) => {
+  //   if (!prepared || !wasted) return "0.0";
+  //   return ((wasted / prepared) * 100).toFixed(1);
+  // };
 
   const handleEdit = (item) => {
     setSelectedItem(item);

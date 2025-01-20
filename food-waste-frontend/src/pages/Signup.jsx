@@ -24,6 +24,7 @@ function Signup() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -39,30 +40,28 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setSnackbarMessage("Passwords don't match");
-      setSnackbarSeverity("error");
-      setOpenSnackbar(true);
-      return;
-    }
+    setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/user/signup', {
+      await axios.post("http://localhost:5000/api/user/signup", {
+        name: formData.name,
         email: formData.email,
         password: formData.password,
-        name: formData.name
       });
       
-      setSnackbarMessage("Signup successful! Redirecting to login...");
+      setSnackbarMessage("Account created successfully! Please login.");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
       
       setTimeout(() => {
-        navigate('/login');
-      }, 1500);
-    } catch (err) {
-      setSnackbarMessage(err.response?.data?.message || 'Something went wrong');
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      console.error("Signup error:", error);
+      setSnackbarMessage(error.response?.data?.message || "Error creating account");
       setSnackbarSeverity("error");
       setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,6 +139,7 @@ function Signup() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={loading}
             >
               Sign Up
             </Button>
